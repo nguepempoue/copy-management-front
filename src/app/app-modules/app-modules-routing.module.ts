@@ -1,11 +1,15 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AppModuleComponent } from './app-module/app-module.component';
+import { ViewMoreCourseComponent } from './courses/view-more-course/view-more-course.component';
 
 const routes: Routes = [
   {
     path:"", component: AppModuleComponent,
     children: [
+      {
+        path:"view-more-course", component: ViewMoreCourseComponent
+      },
 
       {
         path : 'courses',

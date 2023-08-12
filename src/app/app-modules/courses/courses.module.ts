@@ -3,15 +3,20 @@ import { CommonModule } from '@angular/common';
 
 import { CoursesRoutingModule } from './courses-routing.module';
 import { CourseComponent } from './course/course.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ViewMoreCourseComponent } from './view-more-course/view-more-course.component';
 
 
 @NgModule({
   declarations: [
-    CourseComponent
+    CourseComponent,
+    ViewMoreCourseComponent
   ],
   imports: [
     CommonModule,
-    CoursesRoutingModule
+    CoursesRoutingModule,
+    FormsModule,
+    ReactiveFormsModule,
   ]
 })
 export class CoursesModule { }
