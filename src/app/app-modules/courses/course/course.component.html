@@ -39,7 +39,7 @@
                               
                           </fieldset>
                       </div>
-                      <div class="col-md-2 col-12 text-center">
+                      <div *ngIf="isAdmin" class="col-md-2 col-12 text-center">
                           <button type="submit" class="btn-gradient-secondary" data-bs-toggle="modal" data-bs-target="#addCourse">Add course</button>
                       </div>
                   </form>
@@ -77,6 +77,9 @@
                               <td class="text-truncate">
                                 <a  [routerLink]="['/view-more-course']" [queryParams]="{id: course.id}" class="mb-0 btn-sm btn btn-outline-success round">View</a>
                             </td>
+                            <td class="text-truncate">
+                                <a (click)="onClick(course.id)" class="mb-0 btn-sm btn btn-outline-success round">Delete</a>
+                            </td>
                           </tr>
                       </tbody>
                   </table>
@@ -100,28 +103,45 @@
           <h5 class="modal-title" id="staticBackdropLabel">Adding new course</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
-        <form action="" [formGroup]="courseForm" (ngSubmit)="onSave()">
+        <form action="" [formGroup]="courseForm" (ngSubmit)="onSaveCourse()">
             <div class="modal-body">
             
                 <div class="mb-3">
                     <label for="name" class="form-label">Name</label>
                     <input type="text" class="form-control" id="name" formControlName="name" placeholder="Name">
                   </div>
+
+                  <div class="text-danger"
+                  *ngIf="courseForm.get('name')?.errors?.['required'] && courseForm.get('name')?.touched">
+                    <small class="text-police">Please enter name</small>
+                   </div>
     
                   <div class="mb-3">
-                    <label for="name" class="form-label">Note d'évalution</label>
-                    <input type="text" class="form-control" id="name" formControlName="evaluationNote" placeholder="Name">
+                    <label for="name" class="form-label">Evalution note</label>
+                    <input type="text" class="form-control" id="name" formControlName="evaluationNote" placeholder="Evaluetion nota">
                   </div>
+
+                  <div class="text-danger"
+                  *ngIf="courseForm.get('evaluationNote')?.errors?.['required'] && courseForm.get('evaluationNote')?.touched">
+                    <small class="text-police">Please enter evaluationNote</small>
+                   </div>
     
                   <select class="form-select" formControlName="idTeather" aria-label="Default select example">
                     <option selected>select course teacher </option>
                     <option *ngFor="let user of users" [ngValue]="user.id">{{user.firstName}}-{{user.lastName}}</option>
-                  </select> <br>
+                  </select> 
+                  <br>
     
                   <div class="mb-3">
                     <label for="description" class="form-label">Description</label>
                     <textarea class="form-control" formControlName="description" id="description" rows="3"></textarea>
                   </div>
+
+
+                  <div class="text-danger"
+                  *ngIf="courseForm.get('description')?.errors?.['required'] && courseForm.get('description')?.touched">
+                    <small class="text-police">Please enter description</small>
+                   </div>
             </div>
 
             <div class="modal-footer">

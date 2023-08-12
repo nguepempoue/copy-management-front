@@ -27,11 +27,19 @@ export class CourseService {
     return this.httpClient.get<any>(this.baseUrl + 'courses/all', httpOptions);
   }
 
+  getAllCourseOfATeatcher(idUser: number):Observable<any>{
+    return this.httpClient.get<any>(this.baseUrl + 'courses/all-courses-by/' + idUser, httpOptions);
+  }
+
   createCourse(course: Course, idTeather: number):Observable<Course>{
     return this.httpClient.post<Course>(this.baseUrl + 'courses/create-course/teatcher/' + idTeather, course, httpOptions);
   }
 
   findCourseById(id: string):Observable<any>{
     return this.httpClient.get<any>(this.baseUrl + 'courses/id?id=' + id, httpOptions);
+  }
+
+  deleteById(id: number):Observable<any>{
+    return this.httpClient.delete<any>(this.baseUrl + 'courses/'+ id, httpOptions);
   }
 }

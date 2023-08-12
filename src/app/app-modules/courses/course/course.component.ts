@@ -19,14 +19,30 @@ export class CourseComponent implements OnInit {
   users: User[] = [];
 
   course: Course = new Course();
+  user: User = new User();
   isProgressing: boolean = false;
+  isAdmin: boolean = false;
 
   constructor(private courseService: CourseService, private utilityService: UtilityService, private formBuilder: FormBuilder,private userService: UserService) { }
 
   ngOnInit(): void {
-    this.getAllCourse();
-    this.getAllUsersTeatcher();
     this.formInit();
+    this.getAllUsersTeatcher()
+    this.getConnectedUser()
+  }
+
+  getConnectedUser() {
+    this.userService.findUserByEmail(this.utilityService.getUserName()).subscribe((res) => {
+      res.data.roles.forEach((role: any)=>{
+        if(role.name == "ADMIN"){
+            this.getAllCourse();
+            this.isAdmin = true;
+        }else if(role.name == "TEATCHER"){
+          this.getAllCourseOfATeatcher(res.data.id);
+          this.isAdmin = false;
+        }
+      })
+    })
   }
 
   
@@ -36,6 +52,14 @@ export class CourseComponent implements OnInit {
       console.log("this.users::", this.courses);
     })
   }
+
+  getAllCourseOfATeatcher(idTeatcher: number){
+    this.courseService.getAllCourseOfATeatcher(idTeatcher).subscribe((res)=>{
+      this.courses = res.data;
+      console.log("this.users::", this.courses);
+    })
+  }
+
 
   getAllUsersTeatcher(){
     this.userService.getAllUsersTeatcher().subscribe((res)=>{
@@ -52,15 +76,12 @@ export class CourseComponent implements OnInit {
     })
   }
 
-  onSave(){
+  onSaveCourse(){
     this.isProgressing = true
     const formValue = this.courseForm.value;
     this.course.name = formValue.name;
     this.course.description = formValue.description;
     this.course.evaluationNote = formValue.evaluationNote
-
-    console.log("courses:: ", this.course);
-    console.log("idTeather:: ", formValue.idTeather);
 
     this.courseService.createCourse(this.course, formValue.idTeather).subscribe((result: any)=>{
       console.log("result::", result);
@@ -72,5 +93,9 @@ export class CourseComponent implements OnInit {
     })
   }
   
-
+  onClick(idCourse: number){
+    this.courseService.deleteById(idCourse).subscribe(()=>{
+      this.getAllCourse();
+    })
+  }
 }
